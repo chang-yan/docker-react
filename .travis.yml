@@ -1,5 +1,21 @@
 sudo: required
+services:
+  - docker
+
 before_cache:
   - docker build -t jasonwu/docker-react -f Dockerfile.dev .
+
 scripts:
   - docker run -e CI=true jasonwu/docker-react npm run test
+
+deploy:
+  provider: elasticbeanstalk # AWS Elastic Beanstalk
+  region: "ap-southeast-2" # AWS region
+  app: "frontend"
+  env: "Frontend-env"
+  bucket: "elasticbeanstalk-ap-southeast-2-183295412920" # S3 bucket
+  bucket_path: "frontend" # same as app name
+  on:
+    branch: main
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: "$AWS_SECRET_KEY"
