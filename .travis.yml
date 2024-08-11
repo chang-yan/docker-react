@@ -1,11 +1,13 @@
 sudo: required
+language: generic
+
 services:
   - docker
 
-before_script:
+before_install:
   - docker build -t jasonwu/docker-react -f Dockerfile.dev .
 
-scripts:
+script:
   - docker run -e CI=true jasonwu/docker-react npm run test
 
 deploy:
